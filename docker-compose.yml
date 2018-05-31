@@ -1,0 +1,38 @@
+version: '3.3'
+
+services:
+   db_cd:
+     image: mysql:5.7
+     volumes:
+       - /var/lib/mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: admin
+       MYSQL_DATABASE: ps
+       MYSQL_USER: ps
+       MYSQL_PASSWORD: ps
+     command: mysqld --sql_mode=""
+
+   prestashop_cd:
+     depends_on:
+       - db_cd
+     image: prestashop/prestashop:1.7.3.3
+     ports:
+       - "8080:80"
+     restart: always
+     environment:
+       PS_INSTALL_AUTO: 1
+       PS_ERASE_DB: 0
+       DB_SERVER: db_cd
+       DB_USER: ps
+       DB_PASSWD: ps
+       DB_NAME: ps
+       PS_DEV_MODE: 0
+       PS_DOMAIN: localhost:8080
+       PS_FOLDER_ADMIN: admin123
+       PS_FOLDER_INSTALL: install123
+       ADMIN_MAIL: demo@prestashop.com
+       ADMIN_PASSWD: 12345678
+     volumes:
+       - /var/www/html
+       - ./classic_dark:/var/www/html/themes/classic_dark
