@@ -27,6 +27,7 @@ const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 let config = {
+  devtool: 'source-map',
   entry: {
     main: [
       './js/theme.js',
@@ -51,11 +52,22 @@ let config = {
             {
               loader: 'css-loader',
               options: {
-                minimize: true
+                // minimize: true,
+                sourceMap: true
               }
             },
-            'postcss-loader',
-            'sass-loader'
+            {
+              loader: 'postcss-loader',
+              options: {
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true
+              }
+            },
           ]
         })
       },
@@ -88,7 +100,7 @@ let config = {
 
 config.plugins.push(
   new webpack.optimize.UglifyJsPlugin({
-    sourceMap: false,
+    sourceMap: true,
     compress: {
       sequences: true,
       conditionals: true,
